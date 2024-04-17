@@ -5,6 +5,7 @@ const mongoose = require("mongoose");
 
 const Note = require("./models/Note");
 const User = require("./models/User");
+const UserLogin = require("./models/UserLogin");
 
 const bodyParser = require("body-parser");
 app.use(bodyParser.urlencoded({ extended: false }));
@@ -17,6 +18,34 @@ mongoose
     app.get("/", function (req, res) {
       res.send("This is the Home page");
     });
+
+    ////////////////////////////////////USER LOGIN////////////////////////////////////////////////////////
+    app.get("/users/login/list", async function (req, res) {
+      var userlogin = await UserLogin.find();
+      res.json(userlogin);
+    });
+
+    app.get("/users/login/list/:username", async function (req, res) {
+      var userlogin = await UserLogin.find({ username: req.params.username });
+      res.json(userlogin);
+    });
+
+    app.post("/users/login/add", async function (req, res) {
+      await UserLogin.deleteOne({ loginid: req.body.loginid });
+      const NewUserLogin = new UserLogin({
+        loginid: req.body.loginid,
+        username: req.body.username,
+        useremail: req.body.useremail,
+        password: req.body.password,
+      });
+      await NewUserLogin.save();
+      const response = {
+        message: "New User Created!!" + `id ${req.body.loginid}`,
+      };
+      res.json(response);
+    });
+
+    //////////////////////////////////////////////////////////////////////////////////////////////////////
 
     //////////////////////////////////////////USER///////////////////////////////////////////////////////
     //user list
