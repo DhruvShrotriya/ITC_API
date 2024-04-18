@@ -26,7 +26,7 @@ mongoose
     });
 
     app.get("/users/login/list/:loginid", async function (req, res) {
-      var userlogin = await UserLogin.find({ username: req.params.loginid });
+      var userlogin = await UserLogin.find({ loginid: req.params.loginid });
       res.json(userlogin);
     });
 
