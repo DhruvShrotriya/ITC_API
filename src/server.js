@@ -6,6 +6,7 @@ const mongoose = require("mongoose");
 const Note = require("./models/Note");
 const User = require("./models/User");
 const UserLogin = require("./models/UserLogin");
+const DeclarationPI = require("./models/DeclarationPI");
 
 const bodyParser = require("body-parser");
 app.use(bodyParser.urlencoded({ extended: false }));
@@ -21,8 +22,8 @@ mongoose
 
     ////////////////////////////////////USER LOGIN////////////////////////////////////////////////////////
     app.get("/users/login/list", async function (req, res) {
-      var userlogin = await UserLogin.find();
-      res.json(userlogin);
+      var declarationPI = await DeclarationPI.find();
+      res.json(declarationPI);
     });
 
     app.get("/users/login/list/:loginid", async function (req, res) {
@@ -47,6 +48,37 @@ mongoose
 
     //////////////////////////////////////////////////////////////////////////////////////////////////////
 
+    ////////////////////////////////////////USER DECLARATION//////////////////////////////////////////////
+    app.get("/declaration/list/:loginid", async function (req, res) {
+      var userlogin = await UserLogin.find({ loginid: req.params.loginid });
+      res.json(userlogin);
+    });
+
+    app.post("/declaration/add", async function (req, res) {
+      await DeclarationPI.deleteOne({ loginid: req.body.loginid });
+      const NewDeclarationPI = new DeclarationPI({
+        loginid: req.body.loginid,
+        name: req.body.name,
+        mobile: req.body.mobile,
+        address: req.body.address,
+        pin: req.body.pin,
+        restype: req.body.restype,
+        countryOfResidence: req.body.countryOfResidence,
+        PAN: req.body.PAN,
+        company: req.body.company,
+        employeeID: req.body.employeeID,
+        DOJ: req.body.DOJ,
+        DOBI: req.body.DOBI,
+        officeLocation: req.body.officeLocation,
+        department: req.body.department,
+        designation: req.body.designation,
+        nameOfInstitute: req.body.nameOfInstitute,
+      });
+      await NewDeclarationPI.save();
+      const response = { message: "Declaration updated" };
+      res.json(response);
+    });
+    //////////////////////////////////////////////////////////////////////////////////////////////////////
     //////////////////////////////////////////USER///////////////////////////////////////////////////////
     //user list
     app.get("/users/list", async function (req, res) {
