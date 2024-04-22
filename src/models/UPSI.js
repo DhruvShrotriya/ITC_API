@@ -11,8 +11,6 @@ const UPSISchema = mongoose.Schema({
   validityTo: { type: Date, default: Date.now },
   status: { type: String, required: true },
   remarks: { type: String },
-  DP: { type: String },
-  CP: { type: String },
 });
 
 module.exports = mongoose.model("UPSI", UPSISchema);

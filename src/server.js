@@ -8,6 +8,7 @@ const User = require("./models/User");
 const UserLogin = require("./models/UserLogin");
 const DeclarationPI = require("./models/DeclarationPI");
 const UPSI = require("./models/UPSI");
+const UPSIPerson = require("./models/UPSIPerson");
 
 const bodyParser = require("body-parser");
 app.use(bodyParser.urlencoded({ extended: false }));
@@ -160,11 +161,28 @@ mongoose
         validityTo: req.body.validityTo,
         status: req.body.status,
         remarks: req.body.remarks,
-        DP: req.body.DP,
-        CP: req.body.CP,
       });
 
       await NewUPSI.save();
+      const response = {
+        message: "User UPSI Created!!" + `id ${req.body.loginid}`,
+      };
+      res.json(response);
+    });
+
+    /////////////// UPSI Persons (CPs+DPs)
+    app.get("/upsi/persons/list", async function (req, res) {
+      var upsiPerson = await UPSIPerson.find();
+      res.json(upsiPerson);
+    });
+
+    app.post("/upsi/persons/add", async function (req, res) {
+      const NewUPSIPerson = new UPSIPerson({
+        upsiID: req.body.upsiID,
+        DP: req.body.DP,
+        CP: req.body.CP,
+      });
+      await NewUPSIPerson.save();
       const response = {
         message: "User UPSI Created!!" + `id ${req.body.loginid}`,
       };
