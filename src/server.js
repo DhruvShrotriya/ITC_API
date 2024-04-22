@@ -7,6 +7,7 @@ const Note = require("./models/Note");
 const User = require("./models/User");
 const UserLogin = require("./models/UserLogin");
 const DeclarationPI = require("./models/DeclarationPI");
+const UPSI = require("./models/UPSI");
 
 const bodyParser = require("body-parser");
 app.use(bodyParser.urlencoded({ extended: false }));
@@ -22,8 +23,8 @@ mongoose
 
     ////////////////////////////////////USER LOGIN////////////////////////////////////////////////////////
     app.get("/users/login/list", async function (req, res) {
-      var declarationPI = await DeclarationPI.find();
-      res.json(declarationPI);
+      var userlogin = await UserLogin.find();
+      res.json(userlogin);
     });
 
     app.get("/users/login/list/:loginid", async function (req, res) {
@@ -50,8 +51,8 @@ mongoose
 
     ////////////////////////////////////////USER DECLARATION//////////////////////////////////////////////
     app.get("/declaration/list/:loginid", async function (req, res) {
-      var userlogin = await UserLogin.find({ loginid: req.params.loginid });
-      res.json(userlogin);
+      var declarationPI = await DeclarationPI.find();
+      res.json(declarationPI);
     });
 
     app.post("/declaration/add", async function (req, res) {
@@ -79,6 +80,7 @@ mongoose
       res.json(response);
     });
     //////////////////////////////////////////////////////////////////////////////////////////////////////
+
     //////////////////////////////////////////USER///////////////////////////////////////////////////////
     //user list
     app.get("/users/list", async function (req, res) {
@@ -139,6 +141,37 @@ mongoose
       res.json(response);
     });
     ///////////////////////////////////////////////////////////////////////////////////////////////
+
+    ///////////////////////////////////////UPSI//////////////////////////////////////////////////////
+    //all upsi
+    app.get("/upsi/list", async function (req, res) {
+      var upsi = await UPSI.find();
+      res.json(upsi);
+    });
+
+    app.post("/upsi/add", async function (req, res) {
+      await User.deleteOne({ id: req.body.upsiID });
+      const NewUPSI = new UPSI({
+        upsiID: req.body.upsiID,
+        eventType: req.body.eventType,
+        nameUPSI: req.body.nameUPSI,
+        description: req.body.description,
+        validityFrom: req.body.validityFrom,
+        validityTo: req.body.validityTo,
+        status: req.body.status,
+        remarks: req.body.remarks,
+        DP: req.body.DP,
+        CP: req.body.CP,
+      });
+
+      await NewUPSI.save();
+      const response = {
+        message: "User UPSI Created!!" + `id ${req.body.loginid}`,
+      };
+      res.json(response);
+    });
+
+    /////////////////////////////////////////////////////////////////////////////////////////////////
     // app.get("/", function (req, res) {
     //   res.send("This is the home page");
     // });
