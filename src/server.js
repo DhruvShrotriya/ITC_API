@@ -190,6 +190,12 @@ mongoose
       res.json(response);
     });
 
+    //Person get
+    app.get("/upsi/persons/list/:id", async function (req, res) {
+      var upsiPerson = await UPSIPerson.find({ upsiID: req.body.loginid });
+      res.json(upsiPerson);
+    });
+
     app.put("/upsi/persons/update/:id", async function (req, res) {
       try {
         const id = req.params.id;
