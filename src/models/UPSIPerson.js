@@ -6,6 +6,7 @@ const UPSIPersonSchema = mongoose.Schema({
   upsiID: { type: String, unique: true, required: true },
   DP: { type: "String" },
   CP: { type: "String" },
+  owner: { type: "String" },
 });
 
 module.exports = mongoose.model("UPSIPerson", UPSIPersonSchema);
