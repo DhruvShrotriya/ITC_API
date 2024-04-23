@@ -9,6 +9,7 @@ const UserLogin = require("./models/UserLogin");
 const DeclarationPI = require("./models/DeclarationPI");
 const UPSI = require("./models/UPSI");
 const UPSIPerson = require("./models/UPSIPerson");
+const CP = require("./models/CP");
 
 const bodyParser = require("body-parser");
 app.use(bodyParser.urlencoded({ extended: false }));
@@ -252,6 +253,26 @@ mongoose
     });
 
     /////////////////////////////////////////////////////////////////////////////////////////////////
+
+    ///////////////////////////////////////////CP////////////////////////////////////////////////////
+    app.get("/cp/list/", async function (req, res) {
+      var cp = await CP.find();
+      res.json(cp);
+    });
+
+    app.post("/cp/list/add", async function (req, res) {
+      var cp = await CP.find({ upsiID: req.body.upsiID });
+      const newcp = new CP({
+        CP: req.body.CP,
+        firm: req.body.firm,
+      });
+      await newcp.save();
+      const response = {
+        message: "User UPSI Created!!" + `id ${req.body.loginid}`,
+      };
+      res.json(response);
+    });
+    ////////////////////////////////////////////////////////////////////////////////////////////////
     // app.get("/", function (req, res) {
     //   res.send("This is the home page");
     // });
