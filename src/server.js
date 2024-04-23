@@ -151,7 +151,7 @@ mongoose
     });
 
     app.post("/upsi/add", async function (req, res) {
-      await User.deleteOne({ upsiID: req.body.upsiID });
+      await UPSI.deleteOne({ upsiID: req.body.upsiID });
       const NewUPSI = new UPSI({
         upsiID: req.body.upsiID,
         eventType: req.body.eventType,
@@ -189,6 +189,33 @@ mongoose
         message: "User UPSI Created!!" + `id ${req.body.loginid}`,
       };
       res.json(response);
+    });
+
+    app.put("/upsi/persons/update/:id", async function (req, res) {
+      try {
+        const id = req.params.id;
+        const updatedFields = {};
+        if (req.body.DP) {
+          updatedFields.DP = req.body.DP;
+        }
+        if (req.body.CP) {
+          updatedFields.CP = req.body.CP;
+        }
+
+        const updatedPerson = await UPSIPerson.findOneAndUpdate(
+          { _id: id },
+          { $set: updatedFields },
+          { new: true }
+        );
+
+        if (!updatedPerson) {
+          return res.status(404).json({ message: "Person not found" });
+        }
+
+        res.json({ message: "Person updated successfully", updatedPerson });
+      } catch (error) {
+        res.status(500).json({ message: "Internal Server Error" });
+      }
     });
 
     //Person get
