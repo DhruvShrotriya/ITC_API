@@ -151,7 +151,7 @@ mongoose
     });
 
     app.post("/upsi/add", async function (req, res) {
-      await User.deleteOne({ id: req.body.upsiID });
+      await User.deleteOne({ upsiID: req.body.upsiID });
       const NewUPSI = new UPSI({
         upsiID: req.body.upsiID,
         eventType: req.body.eventType,
