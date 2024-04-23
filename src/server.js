@@ -192,7 +192,7 @@ mongoose
 
     //Person get
     app.get("/upsi/persons/list/:id", async function (req, res) {
-      var upsiPerson = await UPSIPerson.find({ upsiID: req.body.loginid });
+      var upsiPerson = await UPSIPerson.find({ upsiID: req.params.id });
       res.json(upsiPerson);
     });
 
