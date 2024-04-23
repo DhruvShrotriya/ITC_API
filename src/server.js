@@ -177,6 +177,7 @@ mongoose
     });
 
     app.post("/upsi/persons/add", async function (req, res) {
+      var upsiPerson = await UPSIPerson.find({ upsiID: req.body.upsiID });
       const NewUPSIPerson = new UPSIPerson({
         upsiID: req.body.upsiID,
         DP: req.body.DP,
