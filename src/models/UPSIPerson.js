@@ -4,8 +4,8 @@ const { pipeline } = require("stream");
 
 const UPSIPersonSchema = mongoose.Schema({
   upsiID: { type: String, unique: true, required: true },
-  DP: { type: "array", items: { type: "string" } },
-  CP: { type: "array", items: { type: "string" } },
+  DP: { type: "String" },
+  CP: { type: "String" },
 });
 
 module.exports = mongoose.model("UPSIPerson", UPSIPersonSchema);
