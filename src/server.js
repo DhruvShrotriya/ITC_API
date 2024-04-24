@@ -7,6 +7,7 @@ const Note = require("./models/Note");
 const User = require("./models/User");
 const UserLogin = require("./models/UserLogin");
 const DeclarationPI = require("./models/DeclarationPI");
+const DeclarationRealation = require("./models/DeclarationRelation");
 const UPSI = require("./models/UPSI");
 const UPSIPerson = require("./models/UPSIPerson");
 const CP = require("./models/CP");
@@ -52,8 +53,15 @@ mongoose
     //////////////////////////////////////////////////////////////////////////////////////////////////////
 
     ////////////////////////////////////////USER DECLARATION//////////////////////////////////////////////
-    app.get("/declaration/list/:loginid", async function (req, res) {
+    app.get("/declaration/list", async function (req, res) {
       var declarationPI = await DeclarationPI.find();
+      res.json(declarationPI);
+    });
+
+    app.get("/declaration/list/:loginid", async function (req, res) {
+      var declarationPI = await DeclarationPI.find({
+        loginid: req.params.loginid,
+      });
       res.json(declarationPI);
     });
 
@@ -78,6 +86,30 @@ mongoose
         nameOfInstitute: req.body.nameOfInstitute,
       });
       await NewDeclarationPI.save();
+      const response = { message: "Declaration updated" };
+      res.json(response);
+    });
+
+    ////////////////////// DECLRATION RELATION
+    app.get("/declaration/relation/list", async function (req, res) {
+      var declarationRealation = await DeclarationRealation.find();
+      res.json(declarationRealation);
+    });
+    app.get("/declaration/relation/list/:loginid", async function (req, res) {
+      var declarationRealation = await DeclarationRealation.find({
+        loginid: req.params.loginid,
+      });
+      res.json(declarationRealation);
+    });
+
+    app.post("/declaration/relation/add", async function (req, res) {
+      const newRealtion = new DeclarationRealation({
+        loginid: req.body.loginid,
+        name: req.body.name,
+        relation: req.body.relation,
+        pan: req.body.pan,
+      });
+      await newRealtion.save();
       const response = { message: "Declaration updated" };
       res.json(response);
     });
