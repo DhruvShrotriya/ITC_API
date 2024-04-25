@@ -127,7 +127,7 @@ mongoose
       res.json(declarationDemat);
     });
 
-    app.get("/declaration/demat/list/:name", async function (req, res) {
+    app.get("/declaration/demat/list/byname/:name", async function (req, res) {
       var declarationDemat = await DeclarationDemat.find({
         name: req.params.name,
       });
