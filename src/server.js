@@ -8,6 +8,7 @@ const User = require("./models/User");
 const UserLogin = require("./models/UserLogin");
 const DeclarationPI = require("./models/DeclarationPI");
 const DeclarationRealation = require("./models/DeclarationRelation");
+const DeclarationDemat = require("./models/DeclarationDemat");
 const UPSI = require("./models/UPSI");
 const UPSIPerson = require("./models/UPSIPerson");
 const CP = require("./models/CP");
@@ -113,6 +114,61 @@ mongoose
       const response = { message: "Declaration updated" };
       res.json(response);
     });
+
+    ////////////////////////////Declaration Demat
+    app.get("/declaration/demat/list", async function (req, res) {
+      var declarationDemat = await DeclarationDemat.find();
+      res.json(declarationDemat);
+    });
+    app.get("/declaration/demat/list/:loginid", async function (req, res) {
+      var declarationDemat = await DeclarationDemat.find({
+        loginid: req.params.loginid,
+      });
+      res.json(declarationDemat);
+    });
+
+    app.post("/declaration/demat/add", async function (req, res) {
+      const newDemat = new DeclarationDemat({
+        loginid: req.body.loginid,
+        name: req.body.name,
+        demat: req.body.demat,
+      });
+      await newDemat.save();
+      const response = { message: "Declaration updated" };
+      res.json(response);
+    });
+
+    app.put("/declaration/demat/update/:id", async function (req, res) {
+      try {
+        const id = req.params.id;
+        const updatedFields = {};
+        if (req.body.holdings) {
+          updatedFields.holdings = req.body.holdings;
+        }
+
+        const updatedPerson = await DeclarationDemat.findOneAndUpdate(
+          { _id: id },
+          { $set: updatedFields },
+          { new: true }
+        );
+
+        if (!updatedPerson) {
+          return res.status(404).json({ message: "Person not found" });
+        }
+
+        res.json({ message: "Person updated successfully", updatedPerson });
+      } catch (error) {
+        res.status(500).json({ message: "Internal Server Error" });
+      }
+    });
+
+    app.get("/declaration/demat/list/findid/:demat", async function (req, res) {
+      var declarationDemat = await DeclarationDemat.find({
+        demat: req.params.demat,
+      });
+      res.json(declarationDemat);
+    });
+
     //////////////////////////////////////////////////////////////////////////////////////////////////////
 
     //////////////////////////////////////////USER///////////////////////////////////////////////////////
