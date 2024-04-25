@@ -127,6 +127,13 @@ mongoose
       res.json(declarationDemat);
     });
 
+    app.get("/declaration/demat/list/:name", async function (req, res) {
+      var declarationDemat = await DeclarationDemat.find({
+        name: req.params.name,
+      });
+      res.json(declarationDemat);
+    });
+
     app.post("/declaration/demat/add", async function (req, res) {
       const newDemat = new DeclarationDemat({
         loginid: req.body.loginid,
