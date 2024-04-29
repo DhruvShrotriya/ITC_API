@@ -12,6 +12,7 @@ const DeclarationDemat = require("./models/DeclarationDemat");
 const UPSI = require("./models/UPSI");
 const UPSIPerson = require("./models/UPSIPerson");
 const CP = require("./models/CP");
+const PreClearance = require("./models/Preclearance");
 
 const bodyParser = require("body-parser");
 app.use(bodyParser.urlencoded({ extended: false }));
@@ -367,6 +368,39 @@ mongoose
       };
       res.json(response);
     });
+
+    /////////////////////////////////////////////////////////////PRECLEARANCE/////////////////////////////
+
+    app.get("/preClearance/list", async function (req, res) {
+      var preClearance = await PreClearance.find();
+      res.json(preClearance);
+    });
+
+    app.get("/preclearance/list/:loginid", async function (req, res) {
+      var preclearance = await Preclearance.find({
+        loginid: req.params.loginid,
+      });
+      res.json(preclearance);
+    });
+
+    app.post("/preclearance/add", async function (req, res) {
+      await DeclarationPI.deleteOne({ loginid: req.body.loginid });
+      const NewPreclearance = new Preclearance({
+        loginid: req.body.loginid,
+        for: req.body.for,
+        typeofSecurity: req.body.typeofSecurity,
+        quantity: req.body.quantity,
+        transactionType: req.body.transactionType,
+        demat: req.body.demat,
+        reqested: req.body.reqested,
+        status: req.body.status,
+      });
+      await NewPreclearance.save();
+      const response = { message: "NewPreclearance updated" };
+      res.json(response);
+    });
+
+    /////////////////////////////////////////////////////////////////////////////////////////////////////
     ////////////////////////////////////////////////////////////////////////////////////////////////
     // app.get("/", function (req, res) {
     //   res.send("This is the home page");
