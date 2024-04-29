@@ -376,16 +376,16 @@ mongoose
       res.json(preClearance);
     });
 
-    app.get("/preclearance/list/:loginid", async function (req, res) {
-      var preclearance = await Preclearance.find({
+    app.get("/preClearance/list/:loginid", async function (req, res) {
+      var preClearance = await PreClearance.find({
         loginid: req.params.loginid,
       });
-      res.json(preclearance);
+      res.json(preClearance);
     });
 
-    app.post("/preclearance/add", async function (req, res) {
-      await DeclarationPI.deleteOne({ loginid: req.body.loginid });
-      const NewPreclearance = new Preclearance({
+    app.post("/preClearance/add", async function (req, res) {
+      await PreClearance.deleteOne({ loginid: req.body.loginid });
+      const NewPreclearance = new PreClearance({
         loginid: req.body.loginid,
         for: req.body.for,
         typeofSecurity: req.body.typeofSecurity,
@@ -394,6 +394,8 @@ mongoose
         demat: req.body.demat,
         reqested: req.body.reqested,
         status: req.body.status,
+        reviewdOn: req.body.reviewdOn,
+        remarks: req.body.remarks,
       });
       await NewPreclearance.save();
       const response = { message: "NewPreclearance updated" };

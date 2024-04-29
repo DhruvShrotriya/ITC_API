@@ -12,8 +12,8 @@ const PreclearanceSchema = mongoose.Schema({
   transactionType: { type: String },
   reqested: { type: Date, default: Date.now },
   status: { type: String },
-  reviewdOn: { type: String },
+  reviewdOn: { type: Date },
   remarks: { type: String },
 });
 
-module.exports = mongoose.model("Preclarance", PreclearanceSchema);
+module.exports = mongoose.model("PreClearance", PreclearanceSchema);
