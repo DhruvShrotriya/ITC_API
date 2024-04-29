@@ -391,7 +391,6 @@ mongoose
     });
 
     app.post("/preClearance/add", async function (req, res) {
-      await PreClearance.deleteOne({ loginid: req.body.loginid });
       const NewPreclearance = new PreClearance({
         loginid: req.body.loginid,
         for: req.body.for,
