@@ -382,6 +382,13 @@ mongoose
       });
       res.json(preClearance);
     });
+    app.get("/preClearance/list/:loginid/:status", async function (req, res) {
+      var preClearance = await PreClearance.find({
+        loginid: req.params.loginid,
+        status: req.params.status,
+      });
+      res.json(preClearance);
+    });
 
     app.post("/preClearance/add", async function (req, res) {
       await PreClearance.deleteOne({ loginid: req.body.loginid });
