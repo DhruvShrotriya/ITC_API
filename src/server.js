@@ -415,6 +415,39 @@ mongoose
       res.json(response);
     });
 
+    app.put("/preClearance/update/:id", async function (req, res) {
+      try {
+        const id = req.params.id;
+        const updatedFields = {};
+
+        if (req.body.status) {
+          updatedFields.status = req.body.status;
+        }
+        if (req.body.reviewdOn) {
+          updatedFields.reviewdOn = req.body.reviewdOn;
+        }
+        if (req.body.approvedby) {
+          updatedFields.approvedby = req.body.approvedby;
+        }
+        if (req.body.remarks) {
+          updatedFields.remarks = req.body.remarks;
+        }
+        const preclearance = await PreClearance.findOneAndUpdate(
+          { _id: id },
+          { $set: updatedFields },
+          { new: true }
+        );
+
+        if (!preclearance) {
+          return res.status(404).json({ message: "Person not found" });
+        }
+
+        res.json({ message: "Person updated successfully", preclearance });
+      } catch (error) {
+        res.status(500).json({ message: "Internal Server Error" });
+      }
+    });
+
     /////////////////////////////////////////////////////////////////////////////////////////////////////
     ////////////////////////////////////////////////////////////////////////////////////////////////
     // app.get("/", function (req, res) {
