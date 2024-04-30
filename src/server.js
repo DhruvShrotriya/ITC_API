@@ -389,6 +389,12 @@ mongoose
       });
       res.json(preClearance);
     });
+    app.get("/preClearance/list/status/:status", async function (req, res) {
+      var preClearance = await PreClearance.find({
+        status: req.params.status,
+      });
+      res.json(preClearance);
+    });
 
     app.post("/preClearance/add", async function (req, res) {
       const NewPreclearance = new PreClearance({
@@ -402,6 +408,7 @@ mongoose
         status: req.body.status,
         reviewdOn: req.body.reviewdOn,
         remarks: req.body.remarks,
+        value: req.body.value,
       });
       await NewPreclearance.save();
       const response = { message: "NewPreclearance updated" };

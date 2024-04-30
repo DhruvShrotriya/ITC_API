@@ -12,6 +12,7 @@ const PreclearanceSchema = mongoose.Schema({
   transactionType: { type: String },
   reqested: { type: Date, default: Date.now },
   status: { type: String },
+  value: { type: String },
   reviewdOn: { type: Date },
   remarks: { type: String },
 });
