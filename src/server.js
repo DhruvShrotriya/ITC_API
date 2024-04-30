@@ -389,9 +389,9 @@ mongoose
       });
       res.json(preClearance);
     });
-    app.get("/preClearance/list/status/:status", async function (req, res) {
+    app.get("/preClearance/pending/list", async function (req, res) {
       var preClearance = await PreClearance.find({
-        status: req.params.status,
+        status: "Pending",
       });
       res.json(preClearance);
     });
