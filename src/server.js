@@ -13,6 +13,7 @@ const UPSI = require("./models/UPSI");
 const UPSIPerson = require("./models/UPSIPerson");
 const CP = require("./models/CP");
 const PreClearance = require("./models/Preclearance");
+const Announcement = require("./models/Announcement");
 
 const bodyParser = require("body-parser");
 app.use(bodyParser.urlencoded({ extended: false }));
@@ -446,6 +447,24 @@ mongoose
       } catch (error) {
         res.status(500).json({ message: "Internal Server Error" });
       }
+    });
+
+    //////////////////////////////////////////////Announcement/////////////////////////////////
+    app.get("/announcement/list", async function (req, res) {
+      var announcement = await Announcement.find();
+      res.json(announcement);
+    });
+    app.post("/announcement/add", async function (req, res) {
+      await Announcement.deleteOne({ loginid: req.body.loginid });
+      const NewAnnouncement = new Announcement({
+        loginid: req.body.loginid,
+        announcemet: req.body.announcemet,
+        validityfrom: req.body.validityfrom,
+        validityto: req.body.validityto,
+      });
+      await NewAnnouncement.save();
+      const response = { message: "New Announcement Saved" };
+      res.json(response);
     });
 
     /////////////////////////////////////////////////////////////////////////////////////////////////////
