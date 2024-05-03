@@ -9,6 +9,7 @@ const UserLogin = require("./models/UserLogin");
 const DeclarationPI = require("./models/DeclarationPI");
 const DeclarationRealation = require("./models/DeclarationRelation");
 const DeclarationDemat = require("./models/DeclarationDemat");
+const DeclarationDelete = require("./models/DEclarationDelete");
 const UPSI = require("./models/UPSI");
 const UPSIPerson = require("./models/UPSIPerson");
 const CP = require("./models/CP");
@@ -178,6 +179,54 @@ mongoose
       res.json(declarationDemat);
     });
 
+    //Declaration Delete
+    app.get("/declaration/deletereq/list", async function (req, res) {
+      var declarationDelete = await DeclarationDelete.find();
+      res.json(declarationDelete);
+    });
+
+    app.post("/declaration/delete/add", async function (req, res) {
+      await DeclarationDelete.deleteOne({ loginid: req.body.loginid });
+      const NewDeclarationDelete = new DeclarationDelete({
+        loginid: req.body.loginid,
+        reason: req.body.reason,
+      });
+      await NewDeclarationDelete.save();
+      const response = { message: "Declaration updated" };
+      res.json(response);
+    });
+
+    ///////Delete Declaration
+    app.get("/declaration/delete/user/:loginid", async function (req, res) {
+      await DeclarationPI.deleteMany({ loginid: req.params.loginid });
+      res.json({ message: "All user info deleted successfully" });
+    });
+    ////////Delete Relation
+    app.get(
+      "/declaration/delete/relation/list/:loginid",
+      async function (req, res) {
+        await DeclarationRealation.deleteMany({ loginid: req.params.loginid });
+        res.json({ message: "All Relations deleted successfully" });
+      }
+    );
+
+    //Delete Demat
+    app.get(
+      "/declaration/delete/demat/list/:loginid",
+      async function (req, res) {
+        await DeclarationDemat.deleteMany({ loginid: req.params.loginid });
+        res.json({ message: "All demats deleted successfully" });
+      }
+    );
+
+    //Delete delete Request
+    app.get(
+      "/declaration//delete/deletereq/list/:loginid",
+      async function (req, res) {
+        await DeclarationDelete.deleteMany({ loginid: req.params.loginid });
+        res.json({ message: "All demats deleted successfully" });
+      }
+    );
     //////////////////////////////////////////////////////////////////////////////////////////////////////
 
     //////////////////////////////////////////USER///////////////////////////////////////////////////////
